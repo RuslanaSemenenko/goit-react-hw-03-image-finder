@@ -1,16 +1,24 @@
 import axios from 'axios';
 
-export async function fetchImages(inputData, page) {
-  const searchParams = new URLSearchParams({
-    key: process.env.REACT_APP_API_KEY,
-    q: inputData,
-    image_type: 'photo',
-    orientation: 'horizontal',
-    safesearch: 'true',
-    per_page: 12,
-    page,
-  });
-  const images = await axios.get(`https://pixabay.com/api/?${searchParams}`);
+const API_KEY = '36501043-81ad10453f0c142b16e03b30f';
+const BASE_URL = 'https://pixabay.com/api/';
+const PICS_ON_PAGE = 12;
 
-  return images.data;
+export async function fetchImages(inputData, page) {
+  try {
+    const response = await axios.get(BASE_URL, {
+      params: {
+        q: inputData,
+        page,
+        key: API_KEY,
+        image_type: 'photo',
+        orientation: 'horizontal',
+        per_page: PICS_ON_PAGE,
+      },
+    });
+
+    return response.data;
+  } catch (error) {
+    throw new Error('Something went wrong with the request');
+  }
 }
